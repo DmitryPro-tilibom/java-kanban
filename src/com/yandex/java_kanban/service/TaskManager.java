@@ -42,11 +42,17 @@ public class TaskManager {
         tasks.remove(id);
     }
 
-    public void updateTask(int id, Task task) {
-        final Task oldTask = tasks.get(id);
-        oldTask.setName(task.getName());
-        oldTask.setDescription(task.getDescription());
-        oldTask.setStatus(task.getStatus());
+    //    public void updateTask(Task task) {
+//        final Task oldTask = tasks.get(id);
+//        oldTask.setName(task.getName());
+//        oldTask.setDescription(task.getDescription());
+//        oldTask.setStatus(task.getStatus());
+//    }
+    public void updateTask(Task task) {
+        task.setName("Подъем");
+        task.setDescription("Встать в 8 утра");
+        task.setStatus(Status.DONE);
+        tasks.put(task.getId(), task);
     }
 
     public Epic createEpic(Epic epic) {
@@ -73,21 +79,26 @@ public class TaskManager {
     }
 
     public void deleteEpicById(int id) {
+        Epic epicToUpdate = epics.get(id);
+        for (int subtaskID : epicToUpdate.getSubtaskIDList()) {
+            subTasks.remove(subtaskID);
+        }
         epics.get(id).deleteAllSubTasks();
         epics.remove(id);
     }
 
-    public void updateEpic(int id, Epic epic) {
-        final Epic oldEpic = epics.get(id);
-        oldEpic.setName(epic.getName());
-        oldEpic.setDescription(epic.getDescription());
+    public void updateEpic(Epic epic) {
+        epic.setName("Зарядка");
+        epic.setDescription("Больше подтягиваний и отжиманий");
+        epics.put(epic.getId(), epic);
     }
 
     public SubTask createSubTask(SubTask subTask) {
         subTask.setId(generateID());
         subTasks.put(subTask.getId(), subTask);
         Epic epicToUpdate = epics.get(subTask.getEpicID());
-        epicToUpdate.getSubtaskIDList().add(subTask.getId());
+        epicToUpdate.addSubTask(subTask.getId());
+        //epicToUpdate.getSubtaskIDList().add(subTask.getId());
         calculateEpicStatus(epicToUpdate.getId());
         return subTask;
     }
@@ -102,24 +113,21 @@ public class TaskManager {
 
     public void deleteAllSubTasks() {
         for (Epic epic : epics.values()) {
-            epic.getSubtaskIDList().clear();
+            epic.deleteAllSubTasks();
             calculateEpicStatus(epic.getId());
         }
         subTasks.clear();
     }
 
-    public void deleteSubTaskById(int id) {
+    public void deleteSubTaskById(Integer id) {
         Epic epicToUpdate = subTasks.get(id).getEpic();
-        epicToUpdate.getSubtaskIDList().remove(id);
-        calculateEpicStatus(epicToUpdate.getId());
+        epicToUpdate.deleteSubTask(id);
         subTasks.remove(id);
     }
 
-    public void updateSubTask(int id, SubTask subTask) {
-        final SubTask oldSubtask = subTasks.get(id);
-        oldSubtask.setName(subTask.getName());
-        oldSubtask.setDescription(subTask.getDescription());
-        oldSubtask.setStatus(subTask.getStatus());
+    public void updateSubTask(SubTask subTask) {
+        subTask.setDescription("40 отжиманий");
+        subTask.setStatus(Status.DONE);
         calculateEpicStatus(subTask.getEpicID());
     }
 
@@ -131,23 +139,24 @@ public class TaskManager {
         int doneStatusCount = 0;
         int newStatusCount = 0;
         Epic epic = epics.get(id);
-        ArrayList<Integer> collection = epic.getSubtaskIDList();
-        if (collection.isEmpty()) {
+        ArrayList<Integer> subtaskIDList = epic.getSubtaskIDList();
+        if (subtaskIDList.isEmpty()) {
             epic.setStatus(Status.NEW);
         } else {
-            for (Integer subTaskID : collection) {
-                if (subTasks.get(subTaskID).getStatus() == Status.NEW) {
+            for (Integer subTaskID : subtaskIDList) {
+                final Status status = subTasks.get(subTaskID).getStatus();
+                if (status == Status.NEW) {
                     newStatusCount++;
-                } else if (subTasks.get(subTaskID).getStatus() == Status.DONE) {
+                } else if (status == Status.DONE) {
                     doneStatusCount++;
                 } else {
                     epic.setStatus(Status.IN_PROGRESS);
                     return;
                 }
             }
-            if (doneStatusCount == collection.size()) {
+            if (doneStatusCount == subtaskIDList.size()) {
                 epic.setStatus(Status.DONE);
-            } else if (newStatusCount == collection.size()) {
+            } else if (newStatusCount == subtaskIDList.size()) {
                 epic.setStatus(Status.NEW);
             } else {
                 epic.setStatus(Status.IN_PROGRESS);

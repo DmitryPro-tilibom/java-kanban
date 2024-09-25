@@ -9,27 +9,30 @@ import com.yandex.java_kanban.service.TaskManager;
 public class Main {
     public static void main(String[] args) {
         TaskManager tm = new TaskManager();
-        tm.createTask(new Task("Подъем", "Встать в 7 утра", Status.NEW));
-        tm.createTask(new Task("Отбой", "Лечь в 11 вечера", Status.NEW));
-        System.out.println(tm.showAllTasks());
-        tm.updateTask(1, new Task("Подъем", "Встать в 8 утра", Status.DONE));
+        Task task1 = tm.createTask(new Task("Подъем", "Встать в 7 утра", Status.NEW));
+        tm.updateTask(task1);
+        System.out.println(tm.getTaskById(1));
+        Task task2 = tm.createTask(new Task("Отбой", "Лечь в 11 вечера", Status.NEW));
         System.out.println(tm.showAllTasks());
 
-        tm.createEpic(new Epic("Зарядка", "Отжимания и подтягивания"));
-        tm.createEpic(new Epic("Прогулка", "Пройтись по району"));
+        Epic epic1 = tm.createEpic(new Epic("Зарядка", "Отжимания и подтягивания"));
+        Epic epic2 = tm.createEpic(new Epic("Прогулка", "Пройтись по району"));
         System.out.println(tm.showAllEpics());
-        tm.updateEpic(3, new Epic("Зарядка", "Больше отжиманий и подтягиваний"));
-        System.out.println(tm.showAllEpics());
+        tm.updateEpic(epic1);
+        System.out.println(tm.getEpicById(3));
 
-        tm.createSubTask(new SubTask("Отжимания", "30 раз", Status.NEW, 3));
-        tm.createSubTask(new SubTask("Подтягивания", "10 раз", Status.NEW, 3));
+        SubTask subTask1 = tm.createSubTask(new SubTask("Отжимания", "30 раз",
+                Status.NEW, 3));
+        SubTask subTask2 = tm.createSubTask(new SubTask("Подтягивания", "10 раз",
+                Status.NEW, 3));
         System.out.println(tm.getAllEpicSubTasks(3));
-        tm.createSubTask(new SubTask("Пройтись по району", "1000 шагов", Status.NEW, 4));
+        SubTask subTask3 = tm.createSubTask(new SubTask("Пройтись по району", "1000 шагов",
+                Status.NEW, 4));
         System.out.println(tm.getAllEpicSubTasks(4));
-        tm.updateSubTask(5, new SubTask("Отжимания", "40 раз", Status.DONE, 3));
+        tm.updateSubTask(subTask1);
         System.out.println(tm.getSubTaskById(5));
         System.out.println(tm.getEpicById(3));
-        tm.updateSubTask(6, new SubTask("Подтягивания", "10 раз", Status.DONE, 3));
+        tm.updateSubTask(subTask2);
         System.out.println(tm.getSubTaskById(6));
         System.out.println(tm.getEpicById(3));
         tm.deleteAllSubTasks();
