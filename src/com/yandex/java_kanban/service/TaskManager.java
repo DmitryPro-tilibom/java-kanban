@@ -42,17 +42,12 @@ public class TaskManager {
         tasks.remove(id);
     }
 
-    //    public void updateTask(Task task) {
-//        final Task oldTask = tasks.get(id);
-//        oldTask.setName(task.getName());
-//        oldTask.setDescription(task.getDescription());
-//        oldTask.setStatus(task.getStatus());
-//    }
-    public void updateTask(Task task) {
-        task.setName("Подъем");
-        task.setDescription("Встать в 8 утра");
-        task.setStatus(Status.DONE);
-        tasks.put(task.getId(), task);
+        public void updateTask(Task task) {
+        Task updatedTask = tasks.get(task.getId());
+        updatedTask.setName(task.getName());
+        updatedTask.setDescription(task.getDescription());
+        updatedTask.setStatus(Status.DONE);
+        tasks.put(updatedTask.getId(), updatedTask);
     }
 
     public Epic createEpic(Epic epic) {
@@ -88,9 +83,10 @@ public class TaskManager {
     }
 
     public void updateEpic(Epic epic) {
-        epic.setName("Зарядка");
-        epic.setDescription("Больше подтягиваний и отжиманий");
-        epics.put(epic.getId(), epic);
+        Epic updatedEpic = epics.get(epic.getId());
+        updatedEpic.setName(epic.getName());
+        updatedEpic.setDescription(epic.getDescription());
+        epics.put(updatedEpic.getId(), updatedEpic);
     }
 
     public SubTask createSubTask(SubTask subTask) {
@@ -98,7 +94,6 @@ public class TaskManager {
         subTasks.put(subTask.getId(), subTask);
         Epic epicToUpdate = epics.get(subTask.getEpicID());
         epicToUpdate.addSubTask(subTask.getId());
-        //epicToUpdate.getSubtaskIDList().add(subTask.getId());
         calculateEpicStatus(epicToUpdate.getId());
         return subTask;
     }
@@ -126,9 +121,12 @@ public class TaskManager {
     }
 
     public void updateSubTask(SubTask subTask) {
-        subTask.setDescription("40 отжиманий");
-        subTask.setStatus(Status.DONE);
-        calculateEpicStatus(subTask.getEpicID());
+        SubTask updatedSubTask = subTasks.get(subTask.getId());
+        updatedSubTask.setName(subTask.getName());
+        updatedSubTask.setDescription(subTask.getDescription());
+        updatedSubTask.setStatus(Status.DONE);
+        subTasks.put(updatedSubTask.getId(), updatedSubTask);
+        calculateEpicStatus(updatedSubTask.getEpicID());
     }
 
     private int generateID() {
