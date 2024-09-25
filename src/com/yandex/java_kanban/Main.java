@@ -14,13 +14,11 @@ public class Main {
         System.out.println(tm.getTaskById(1));
         Task task2 = tm.createTask(new Task("Отбой", "Лечь в 11 вечера", Status.NEW));
         System.out.println(tm.showAllTasks());
-
         Epic epic1 = tm.createEpic(new Epic("Зарядка", "Отжимания и подтягивания"));
         Epic epic2 = tm.createEpic(new Epic("Прогулка", "Пройтись по району"));
         System.out.println(tm.showAllEpics());
         tm.updateEpic(epic1);
         System.out.println(tm.getEpicById(3));
-
         SubTask subTask1 = tm.createSubTask(new SubTask("Отжимания", "30 раз",
                 Status.NEW, 3));
         SubTask subTask2 = tm.createSubTask(new SubTask("Подтягивания", "10 раз",
@@ -34,8 +32,6 @@ public class Main {
         System.out.println(tm.getEpicById(3));
         tm.updateSubTask(subTask2);
         System.out.println(tm.getSubTaskById(6));
-        System.out.println(tm.getEpicById(3));
-        tm.deleteAllSubTasks();
         System.out.println(tm.getEpicById(3));
     }
 }
