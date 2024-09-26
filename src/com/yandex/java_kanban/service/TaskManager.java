@@ -77,7 +77,6 @@ public class TaskManager {
         for (int subtaskID : epicToUpdate.getSubtaskIDList()) {
             subTasks.remove(subtaskID);
         }
-        epics.remove(id);
     }
 
     public void updateEpic(Epic epic) {
@@ -112,7 +111,10 @@ public class TaskManager {
     }
 
     public void deleteSubTaskById(Integer id) {
-        subTasks.remove(id);
+        final SubTask subTaskToDelete = subTasks.remove(id);
+        Epic epicToUpdate = subTaskToDelete.getEpic();
+        epicToUpdate.deleteSubTask(id);
+        calculateEpicStatus(epicToUpdate.getId());
     }
 
     public void updateSubTask(SubTask subTask) {
