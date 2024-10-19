@@ -3,19 +3,23 @@ package com.yandex.java_kanban.service;
 import com.yandex.java_kanban.model.Task;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager{
-    private final LinkedList<Task> history = new LinkedList<>();
+    private static final int historySize = 10;
+    private final List<Task> history = new LinkedList<>();
     @Override
-    public void add(Task task) {
-        if (history.size() == 10) {
-            history.remove();
+    public void addToHistory(Task task) {
+        if(task != null) {
+            if (history.size() == historySize) {
+                history.removeFirst();
+            }
+            history.add(task);
         }
-       history.add(task);
     }
 
     @Override
-    public LinkedList<Task> getHistory() {
-        return history;
+    public List<Task> getHistory() {
+        return List.copyOf(history);
     }
 }

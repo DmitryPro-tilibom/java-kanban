@@ -1,10 +1,11 @@
+package serviceTest;
+
 import com.yandex.java_kanban.model.Epic;
 import com.yandex.java_kanban.model.SubTask;
 import com.yandex.java_kanban.model.Status;
 import com.yandex.java_kanban.model.Task;
 import com.yandex.java_kanban.service.TaskManager;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
 import static com.yandex.java_kanban.service.Managers.getDefault;
 import static org.junit.Assert.*;

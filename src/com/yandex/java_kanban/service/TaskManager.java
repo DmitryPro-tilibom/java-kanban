@@ -4,15 +4,14 @@ import com.yandex.java_kanban.model.Epic;
 import com.yandex.java_kanban.model.SubTask;
 import com.yandex.java_kanban.model.Task;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 public interface TaskManager {
-    ArrayList<Task> showAllTasks();
+    List<Task> showAllTasks();
 
-    ArrayList<Epic> showAllEpics();
+    List<Epic> showAllEpics();
 
-    ArrayList<SubTask> showAllSubTasks();
+    List<SubTask> showAllSubTasks();
 
     void deleteAllTasks();
 
@@ -42,11 +41,11 @@ public interface TaskManager {
 
     SubTask getSubTaskById(int id);
 
-    ArrayList<Integer> getAllEpicSubTasks(int epicID);
+    List<Integer> getAllEpicSubTasks(int epicID);
 
     Epic getEpicById(int id);
 
     Task getTaskById(int id);
 
-    LinkedList<Task> getHistory();
+    List<Task> getHistory();
 }

@@ -2,10 +2,10 @@ package com.yandex.java_kanban.service;
 
 import com.yandex.java_kanban.model.Task;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public interface HistoryManager {
-    void add(Task task);
+    void addToHistory(Task task);
 
-    LinkedList<Task> getHistory();
+    List<Task> getHistory();
 }

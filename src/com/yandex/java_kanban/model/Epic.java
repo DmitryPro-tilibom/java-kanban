@@ -1,15 +1,16 @@
 package com.yandex.java_kanban.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
-    private final ArrayList<Integer> subtaskIDList = new ArrayList<>();
+    private final List<Integer> subtaskIDList = new ArrayList<>();
 
     public Epic(String name, String description) {
         super(name, description, Status.NEW);
     }
 
-    public ArrayList<Integer> getSubtaskIDList() {
+    public List<Integer> getSubtaskIDList() {
         return subtaskIDList;
     }
 
