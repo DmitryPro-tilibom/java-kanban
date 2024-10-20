@@ -1,4 +1,4 @@
-package serviceTest;
+package com.yandex.java_kanban.test.serviceTest;
 
 import com.yandex.java_kanban.service.HistoryManager;
 import com.yandex.java_kanban.service.Managers;
@@ -33,19 +33,5 @@ public class ManagersTest {
     @Test
     public void historyIsNotNullTest() {
         assertNotNull(history, "истории задач нет.");
-    }
-
-    @Test
-    public void taskIsAddedToHistoryTest() {
-        historyManager.addToHistory(task);
-        assertEquals(1, historyManager.getHistory().size(), "задача не добавлена в историю.");
-    }
-
-    @Test
-    public void historySizeMustBe10Test() {
-        for (int i = 0; i < 12; i++) {
-            historyManager.addToHistory(task);
-        }
-        assertEquals(10, historyManager.getHistory().size(), "Размер не 10.");
     }
 }

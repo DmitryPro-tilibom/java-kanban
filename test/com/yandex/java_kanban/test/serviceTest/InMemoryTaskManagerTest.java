@@ -1,19 +1,26 @@
-package serviceTest;
+package com.yandex.java_kanban.test.serviceTest;
 
 import com.yandex.java_kanban.model.Epic;
 import com.yandex.java_kanban.model.SubTask;
 import com.yandex.java_kanban.model.Status;
 import com.yandex.java_kanban.model.Task;
+import com.yandex.java_kanban.service.HistoryManager;
 import com.yandex.java_kanban.service.TaskManager;
 import org.junit.Test;
 
+import java.util.List;
+
 import static com.yandex.java_kanban.service.Managers.getDefault;
+import static com.yandex.java_kanban.service.Managers.getDefaultHistory;
 import static org.junit.Assert.*;
 
-public class TaskManagerTest {
+public class InMemoryTaskManagerTest {
     private final TaskManager taskManager = getDefault();
+    private final HistoryManager historyManager = getDefaultHistory();
     Task testTask = new Task("AAA", "TASK", Status.NEW);
     Epic epic1 = new Epic("EPIC1", "TESTEPIC");
+    SubTask subTask1 = new SubTask("subTask1", "testsubtask", Status.NEW, epic1.getId());
+    SubTask subTask2 = new SubTask("subTask2", "testsubtask", Status.DONE, epic1.getId());
 
     @Test
     public void tasksEqualById() {
@@ -48,5 +55,28 @@ public class TaskManagerTest {
         SubTask subTask = new SubTask("testSubTask", "TESTSUBTASK", Status.NEW, epic1.getId());
         taskManager.createSubTask(subTask);
         assertNotEquals(subTask.getId(), subTask.getEpicID());
+    }
+
+    @Test
+    public void epicChangesStatusIfSubTaskAdded(){
+        taskManager.createEpic(epic1);
+        SubTask subTask1 = new SubTask("testSubTask", "TESTSUBTASK", Status.NEW, epic1.getId());
+        taskManager.createSubTask(subTask1);
+        assertSame(epic1.getStatus(), Status.NEW);
+        SubTask subTask2 = new SubTask("testSubTask", "TESTSUBTASK", Status.DONE, epic1.getId());
+        taskManager.createSubTask(subTask2);
+        assertSame(Status.IN_PROGRESS, epic1.getStatus());
+        subTask1.setStatus(Status.DONE);
+        taskManager.calculateEpicStatus(epic1.getId());
+        assertSame(Status.DONE, epic1.getStatus());
+    }
+
+    @Test
+    public void taskIsAddedToHistoryIfGetByIdMethodUsed(){
+        Task task1 = new Task("task", "testtask", Status.NEW);
+        taskManager.createTask(task1);
+        System.out.println(taskManager.getTaskById(task1.getId()));
+        assertEquals(1, taskManager.getHistory().size());
+        assertEquals(task1, taskManager.getHistory().getFirst());
     }
 }
