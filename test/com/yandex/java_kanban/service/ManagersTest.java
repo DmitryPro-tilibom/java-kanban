@@ -1,4 +1,4 @@
-package com.yandex.java_kanban.test.serviceTest;
+package com.yandex.java_kanban.service;
 
 import com.yandex.java_kanban.service.HistoryManager;
 import com.yandex.java_kanban.service.Managers;

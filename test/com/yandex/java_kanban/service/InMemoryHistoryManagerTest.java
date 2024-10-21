@@ -1,4 +1,4 @@
-package com.yandex.java_kanban.test.serviceTest;
+package com.yandex.java_kanban.service;
 
 import com.yandex.java_kanban.model.Status;
 import com.yandex.java_kanban.model.Task;
