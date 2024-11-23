@@ -35,13 +35,13 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public List<Task> getTasks() {
-        List<Task> HistoryList = new ArrayList<>();
+        List<Task> historyList = new ArrayList<>();
         Node node = head;
         while (node != null) {
-            HistoryList.add(node.task);
+            historyList.add(node.task);
             node = node.next;
         }
-        return HistoryList;
+        return historyList;
     }
 
     public void removeNode(Node node) {
