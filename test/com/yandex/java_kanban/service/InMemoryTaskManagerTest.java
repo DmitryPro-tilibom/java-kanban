@@ -19,7 +19,7 @@ public class InMemoryTaskManagerTest {
     private final HistoryManager historyManager = getDefaultHistory();
     Task testTask = new Task("AAA", "TASK", Status.NEW);
     Epic epic1 = new Epic("EPIC1", "TESTEPIC");
-    SubTask subTask1 = new SubTask("subTask1", "testsubtask", Status.NEW, epic1.getId());
+    //SubTask subTask1 = new SubTask("subTask1", "testsubtask", Status.NEW, epic1.getId());
     SubTask subTask2 = new SubTask("subTask2", "testsubtask", Status.DONE, epic1.getId());
 
     @Test
@@ -58,7 +58,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void epicChangesStatusIfSubTaskAdded(){
+    public void epicChangesStatusIfSubTaskAdded() {
         taskManager.createEpic(epic1);
         SubTask subTask1 = new SubTask("testSubTask", "TESTSUBTASK", Status.NEW, epic1.getId());
         taskManager.createSubTask(subTask1);
@@ -72,11 +72,24 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void taskIsAddedToHistoryIfGetByIdMethodUsed(){
-        Task task1 = new Task("task", "testtask", Status.NEW);
-        taskManager.createTask(task1);
-        System.out.println(taskManager.getTaskById(task1.getId()));
-        assertEquals(1, taskManager.getHistory().size());
-        assertEquals(task1, taskManager.getHistory().getFirst());
+    public void epicRemovesSubtaskAfterSubtaskDelete() {
+        taskManager.createEpic(epic1);
+        SubTask subTask1 = new SubTask("testSubTask", "TESTSUBTASK", Status.NEW, epic1.getId());
+        taskManager.createSubTask(subTask1);
+        assertTrue(epic1.getSubtaskIDList().contains(subTask1.getId()));
+        taskManager.deleteSubTaskById(subTask1.getId());
+        assertFalse(epic1.getSubtaskIDList().contains(subTask1.getId()));
+    }
+
+    @Test
+    public void subTaskChangesIdAfterDeleteAndCreated() {
+        taskManager.createEpic(epic1);
+        SubTask subTask1 = new SubTask("testSubTask", "TESTSUBTASK", Status.NEW, epic1.getId());
+        taskManager.createSubTask(subTask1);
+        int oldId = subTask1.getId();
+        taskManager.deleteSubTaskById(subTask1.getId());
+        taskManager.createSubTask(subTask1);
+        int newId = subTask1.getId();
+        assertNotEquals(oldId, newId);
     }
 }
