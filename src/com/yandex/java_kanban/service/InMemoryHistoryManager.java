@@ -18,7 +18,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public Node linkLast(Task task) {
         final Node newNode = new Node(tail, task, null);
-        if(tail == null) {
+        if (tail == null) {
             head = newNode;
         } else {
             tail.next = newNode;
