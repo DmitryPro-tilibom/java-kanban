@@ -2,40 +2,34 @@ package com.yandex.java_kanban.service;
 
 import com.yandex.java_kanban.model.Task;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final Map<Integer, Node> historyLinkedList = new HashMap<>();
+    private final Map<Integer, Node> nodeById = new HashMap<>();
     private Node head;
     private Node tail;
 
     @Override
     public void addToHistory(Task task) {
-        if (historyLinkedList.containsKey(task.getId())) {
-            removeNode(historyLinkedList.get(task.getId()));
-            historyLinkedList.remove(task.getId());
-        }
+        removeNode(nodeById.remove(task.getId()));
         Node nodeAdded = linkLast(task);
-        historyLinkedList.put(task.getId(), nodeAdded);
+        nodeById.put(task.getId(), nodeAdded);
     }
 
     public Node linkLast(Task task) {
-        final Node secondLast = tail;
-        final Node newNode = new Node(secondLast, task, null);
-        tail = newNode;
-        if (secondLast != null) {
-            secondLast.next = newNode;
-        } else {
+        final Node newNode = new Node(tail, task, null);
+        if(tail == null){
             head = newNode;
         }
+        else {
+            tail.next = newNode;
+        }
+        tail = newNode;
         return newNode;
     }
 
     public List<Task> getTasks() {
-        List<Task> historyList = new ArrayList<>();
+        List<Task> historyList = new LinkedList<>();
         Node node = head;
         while (node != null) {
             historyList.add(node.task);
@@ -45,25 +39,21 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public void removeNode(Node node) {
-        if (node == head) {
-            if (head.next != null)
-                head = head.next;
-            else
-                head = null;
+        if (node == null) {
+            return;
+        }
+        final Node next = node.next;
+        final Node prev = node.prev;
+        if (next == null) {
+            tail = prev;
+        } else {
+            next.prev = prev;
         }
 
-        if (node == tail) {
-            if (tail.prev != null)
-                tail = tail.prev;
-            else
-                tail = null;
-        }
-
-        if (node.prev != null) {
-            node.prev.next = node.next;
-            if (node.next != null) {
-                node.next.prev = node.prev;
-            }
+        if (prev == null) {
+            head = next;
+        } else {
+            prev.next = next;
         }
     }
 
@@ -73,13 +63,10 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public void remove(int id) {
-        if (historyLinkedList.containsKey(id)) {
-            removeNode(historyLinkedList.get(id));
-            historyLinkedList.remove(id);
-        }
+        removeNode(nodeById.remove(id));
     }
 
-    static class Node {
+    private static class Node {
         private Node prev;
         private Task task;
         private Node next;
