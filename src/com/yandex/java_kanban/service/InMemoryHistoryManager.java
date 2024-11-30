@@ -2,26 +2,78 @@ package com.yandex.java_kanban.service;
 
 import com.yandex.java_kanban.model.Task;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private static final int HISTORY_SIZE = 10;
-    private final List<Task> history = new LinkedList<>();
+    private final Map<Integer, Node> nodeById = new HashMap<>();
+    private Node head;
+    private Node tail;
 
     @Override
     public void addToHistory(Task task) {
-        if (task == null) {
+        removeNode(nodeById.remove(task.getId()));
+        Node nodeAdded = linkLast(task);
+        nodeById.put(task.getId(), nodeAdded);
+    }
+
+    public Node linkLast(Task task) {
+        final Node newNode = new Node(tail, task, null);
+        if (tail == null) {
+            head = newNode;
+        } else {
+            tail.next = newNode;
+        }
+        tail = newNode;
+        return newNode;
+    }
+
+    public List<Task> getTasks() {
+        List<Task> historyList = new LinkedList<>();
+        Node node = head;
+        while (node != null) {
+            historyList.add(node.task);
+            node = node.next;
+        }
+        return historyList;
+    }
+
+    public void removeNode(Node node) {
+        if (node == null) {
             return;
         }
-        if (history.size() == HISTORY_SIZE) {
-            history.removeFirst();
+        final Node next = node.next;
+        final Node prev = node.prev;
+        if (next == null) {
+            tail = prev;
+        } else {
+            next.prev = prev;
         }
-        history.add(task);
+
+        if (prev == null) {
+            head = next;
+        } else {
+            prev.next = next;
+        }
     }
 
     @Override
     public List<Task> getHistory() {
-        return List.copyOf(history);
+        return getTasks();
+    }
+
+    public void remove(int id) {
+        removeNode(nodeById.remove(id));
+    }
+
+    private static class Node {
+        private Node prev;
+        private Task task;
+        private Node next;
+
+        public Node(Node prev, Task task, Node next) {
+            this.prev = prev;
+            this.task = task;
+            this.next = next;
+        }
     }
 }
