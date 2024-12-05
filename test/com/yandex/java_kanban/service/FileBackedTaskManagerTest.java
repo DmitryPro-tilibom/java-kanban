@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class FileBackedTaskManagerTest {
-    File file = File.createTempFile("test", ".CSV", new File("C:"));
+    File file = File.createTempFile("test", ".CSV");
     FileBackedTaskManager savedFilesManager = new FileBackedTaskManager(file);
     FileBackedTaskManager loadedFilesManager = new FileBackedTaskManager(file);
 
