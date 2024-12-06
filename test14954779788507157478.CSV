@@ -1,3 +1,0 @@
-id,type,name,description,status,epicId(for subtasks)
-1,TASK,task1,test,NEW,
-2,EPIC,epic1,test,NEW,
