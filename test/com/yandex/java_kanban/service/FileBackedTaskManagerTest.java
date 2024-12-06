@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class FileBackedTaskManagerTest {
-    File file = File.createTempFile("test", ".CSV", new File("C:"));
+    File file = File.createTempFile("test", ".CSV");
     FileBackedTaskManager savedFilesManager = new FileBackedTaskManager(file);
     FileBackedTaskManager loadedFilesManager = new FileBackedTaskManager(file);
 
@@ -29,7 +29,7 @@ public class FileBackedTaskManagerTest {
     public void taskIsSavedToFile() {
         savedFilesManager.createTask(task);
         loadedFilesManager.loadFromFile();
-        assertEquals(List.of(task), loadedFilesManager.showAllTasks());
+        assertEquals(List.of(task), loadedFilesManager.getTasks());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class FileBackedTaskManagerTest {
         savedFilesManager.createTask(task);
         savedFilesManager.deleteTaskById(1);
         loadedFilesManager.loadFromFile();
-        assertTrue(loadedFilesManager.showAllTasks().isEmpty());
+        assertTrue(loadedFilesManager.getTasks().isEmpty());
     }
 
     @Test
@@ -46,8 +46,8 @@ public class FileBackedTaskManagerTest {
         savedFilesManager.createEpic(epic);
         savedFilesManager.createSubTask(subTask);
         loadedFilesManager.loadFromFile();
-        assertEquals(savedFilesManager.showAllTasks(), loadedFilesManager.showAllTasks());
-        assertEquals(savedFilesManager.showAllEpics(), loadedFilesManager.showAllEpics());
-        assertEquals(savedFilesManager.showAllSubTasks(), loadedFilesManager.showAllSubTasks());
+        assertEquals(savedFilesManager.getTasks(), loadedFilesManager.getTasks());
+        assertEquals(savedFilesManager.getEpics(), loadedFilesManager.getEpics());
+        assertEquals(savedFilesManager.getSubTasks(), loadedFilesManager.getSubTasks());
     }
 }

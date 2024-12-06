@@ -7,11 +7,11 @@ import com.yandex.java_kanban.model.Task;
 import java.util.List;
 
 public interface TaskManager {
-    List<Task> showAllTasks();
+    List<Task> getTasks();
 
-    List<Epic> showAllEpics();
+    List<Epic> getEpics();
 
-    List<SubTask> showAllSubTasks();
+    List<SubTask> getSubTasks();
 
     void deleteAllTasks();
 

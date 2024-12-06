@@ -16,24 +16,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public void save() {
-        try {
-            if (Files.exists(file.toPath())) {
-                Files.delete(file.toPath());
-            }
-            Files.createFile(file.toPath());
-        } catch (IOException e) {
-            throw new ManagerSaveException("Не удалось найти файл для записи данных");
-        }
         try (FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8, false)) {
             fileWriter.write(FILE_HEADER);
-            for (Task task : super.showAllTasks()) {
-                fileWriter.write(makeStringFromTask(task) + "\n");
+            for (Task task : super.getTasks()) {
+                fileWriter.write(toString(task) + "\n");
             }
-            for (Epic epic : super.showAllEpics()) {
-                fileWriter.write(makeStringFromTask(epic) + "\n");
+            for (Epic epic : super.getEpics()) {
+                fileWriter.write(toString(epic) + "\n");
             }
-            for (SubTask subTask : super.showAllSubTasks()) {
-                fileWriter.write(makeStringFromTask(subTask) + "\n");
+            for (SubTask subTask : super.getSubTasks()) {
+                fileWriter.write(toString(subTask) + "\n");
             }
 
         } catch (IOException e) {
@@ -54,7 +46,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
 
             for (int i = 1; i < strings.size(); i++) {
-                Task task = makeTaskFromString(strings.get(i));
+                Task task = fromString(strings.get(i));
                 if (task instanceof Epic epic) {
                     addEpic(epic);
                 } else if (task instanceof SubTask subTask) {
@@ -176,7 +168,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    private String makeStringFromTask(Task task) {
+    private String toString(Task task) {
         String[] arrayOfFields = {Integer.toString(task.getId()), getType(task).toString(),
                 task.getName(), task.getDescription(), task.getStatus().toString(), getEpicId(task)};
         return String.join(",", arrayOfFields);
@@ -189,7 +181,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return "";
     }
 
-    private Task makeTaskFromString(String string) {
+    private Task fromString(String string) {
         String[] arrayOfFields = string.split(",");
         int id = Integer.parseInt(arrayOfFields[0]);
         String type = arrayOfFields[1];
