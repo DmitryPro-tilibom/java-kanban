@@ -7,11 +7,11 @@ import com.yandex.java_kanban.model.Task;
 import java.util.List;
 
 public interface TaskManager {
-    List<Task> showAllTasks();
+    List<Task> getTasks();
 
-    List<Epic> showAllEpics();
+    List<Epic> getEpics();
 
-    List<SubTask> showAllSubTasks();
+    List<SubTask> getSubTasks();
 
     void deleteAllTasks();
 
@@ -31,6 +31,8 @@ public interface TaskManager {
 
     void calculateEpicStatus(int id);
 
+    void calculateEpicTime(int id);
+
     void updateSubTask(SubTask subtask);
 
     Task createTask(Task task);
@@ -41,7 +43,7 @@ public interface TaskManager {
 
     SubTask getSubTaskById(int id);
 
-    List<Integer> getAllEpicSubTasks(int epicID);
+    List<SubTask> getAllEpicSubTasks(int epicID);
 
     Epic getEpicById(int id);
 
