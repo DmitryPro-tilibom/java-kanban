@@ -6,15 +6,22 @@ import com.yandex.java_kanban.model.SubTask;
 import com.yandex.java_kanban.model.Task;
 import org.junit.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static com.yandex.java_kanban.service.Managers.getDefault;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryHistoryManagerTest {
     private final TaskManager taskManager = getDefault();
-    Task task = new Task("task", "testtask", Status.NEW);
+    Task task = new Task("task", "testtask", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(2));
     Epic epic = new Epic("epic", "testepic");
 
-    SubTask subTask1 = new SubTask("subtask1", "subtask1", Status.NEW, 1);
+    SubTask subTask1 = new SubTask("subtask1", "subtask1", Status.NEW, LocalDateTime.now(),
+            Duration.ofMinutes(2),1);
+
+    SubTask subTask2 = new SubTask("subtask2", "subtask2", Status.NEW, LocalDateTime.now(),
+            Duration.ofMinutes(2),1);
 
     @Test
     public void taskIsAddedToHistoryTest() {
@@ -58,18 +65,28 @@ public class InMemoryHistoryManagerTest {
     public void subTaskIsRemovedFromHistoryTest() {
         taskManager.createEpic(epic);
         taskManager.createSubTask(subTask1);
+        taskManager.createSubTask(subTask2);
         taskManager.getSubTaskById(2);
         taskManager.deleteSubTaskById(2);
         assertEquals(0, taskManager.getHistory().size(), "подзадача не удалена из истории.");
     }
 
     @Test
-    public void epicIsRemovedFromHistoryWithItsSubTaskTest(){
+    public void epicIsRemovedFromHistoryWithItsSubTaskTest() {
         taskManager.createEpic(epic);
         taskManager.createSubTask(subTask1);
         taskManager.getEpicById(1);
         taskManager.getSubTaskById(2);
         taskManager.deleteEpicById(1);
         assertEquals(0, taskManager.getHistory().size(), "Подзадача эпика не удалена из истории.");
+    }
+
+    @Test
+    public void taskIsNotRepeatedInHistoryTest() {
+        taskManager.createTask(task);
+        for(int i = 0; i < 10; i++){
+            taskManager.getTaskById(1);
+        }
+        assertEquals(1, taskManager.getHistory().size());
     }
 }

@@ -8,19 +8,23 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class FileBackedTaskManagerTest {
+public class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
     File file = File.createTempFile("test", ".CSV");
+    File fileForException = new File("C:");
     FileBackedTaskManager savedFilesManager = new FileBackedTaskManager(file);
     FileBackedTaskManager loadedFilesManager = new FileBackedTaskManager(file);
+    FileBackedTaskManager forExceptionTestFilesManager = new FileBackedTaskManager(fileForException);
 
-    Task task = new Task("task1", "test", Status.NEW);
-    Epic epic = new Epic("epic1", "test");
-    SubTask subTask = new SubTask("subTask1", "test", Status.NEW, 2);
+    Task task = new Task("task1", "test", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(2));
+    Epic epic = new Epic("epic1", "test", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(2));
+    SubTask subTask = new SubTask("subTask1", "test", Status.NEW,
+            LocalDateTime.now(), Duration.ofMinutes(3),2);
 
     public FileBackedTaskManagerTest() throws IOException {
     }
@@ -49,5 +53,10 @@ public class FileBackedTaskManagerTest {
         assertEquals(savedFilesManager.getTasks(), loadedFilesManager.getTasks());
         assertEquals(savedFilesManager.getEpics(), loadedFilesManager.getEpics());
         assertEquals(savedFilesManager.getSubTasks(), loadedFilesManager.getSubTasks());
+    }
+
+    @Test
+    public void testException() {
+        assertThrows(ManagerSaveException.class, () -> forExceptionTestFilesManager.createTask(task));
     }
 }

@@ -31,6 +31,8 @@ public interface TaskManager {
 
     void calculateEpicStatus(int id);
 
+    void calculateEpicTime(int id);
+
     void updateSubTask(SubTask subtask);
 
     Task createTask(Task task);
@@ -41,7 +43,7 @@ public interface TaskManager {
 
     SubTask getSubTaskById(int id);
 
-    List<Integer> getAllEpicSubTasks(int epicID);
+    List<SubTask> getAllEpicSubTasks(int epicID);
 
     Epic getEpicById(int id);
 

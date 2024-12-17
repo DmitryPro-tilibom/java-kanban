@@ -4,14 +4,17 @@ import com.yandex.java_kanban.model.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File file;
-    private static final String FILE_HEADER = "id,type,name,description,status,epicId(for subtasks)\n";
+    private static final String FILE_HEADER =
+            "id,type,name,description,status,starttime,duration,epicId(for subtasks)\n";
 
     public FileBackedTaskManager(File file) {
+        super(Managers.getDefaultHistory());
         this.file = file;
     }
 
@@ -170,7 +173,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private String toString(Task task) {
         String[] arrayOfFields = {Integer.toString(task.getId()), getType(task).toString(),
-                task.getName(), task.getDescription(), task.getStatus().toString(), getEpicId(task)};
+                task.getName(), task.getDescription(), task.getStatus().toString(),
+                task.getStartTime().toString(), task.getDuration().toString(), getEpicId(task)};
         return String.join(",", arrayOfFields);
     }
 
@@ -188,7 +192,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = arrayOfFields[2];
         String description = arrayOfFields[3];
         Status status = Status.valueOf(arrayOfFields[4].toUpperCase());
-        Integer epicId = type.equals("SUBTASK") ? Integer.parseInt(arrayOfFields[5]) : null;
+        LocalDateTime startTime = LocalDateTime.parse(arrayOfFields[5]);
+        Duration duration = Duration.parse(arrayOfFields[6]);
+        Integer epicId = type.equals("SUBTASK") ? Integer.parseInt(arrayOfFields[7]) : null;
 
         if (type.equals("EPIC")) {
             Epic epic = new Epic(name, description);
@@ -196,11 +202,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             epic.setStatus(status);
             return epic;
         } else if (type.equals("SUBTASK")) {
-            SubTask subTask = new SubTask(name, description, status, epicId);
+            SubTask subTask = new SubTask(name, description, status, startTime, duration, epicId);
             subTask.setId(id);
             return subTask;
         } else {
-            Task task = new Task(name, description, status);
+            Task task = new Task(name, description, status, startTime, duration);
             task.setId(id);
             return task;
         }
