@@ -14,7 +14,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             "id,type,name,description,status,starttime,duration,epicId(for subtasks)\n";
 
     public FileBackedTaskManager(File file) {
-        super(Managers.getDefaultHistory());
+        super();
         this.file = file;
     }
 

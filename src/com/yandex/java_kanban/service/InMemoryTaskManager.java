@@ -15,11 +15,11 @@ public class InMemoryTaskManager implements TaskManager {
     private final Set<Task> prioritizedTasks = new TreeSet<>(taskComparator);
     private int taskSequence = 0;
 
-    public InMemoryTaskManager(HistoryManager defaultHistory) {
+    public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
         this.epics = new HashMap<>();
         this.subTasks = new HashMap<>();
-        historyManager = Managers.getDefaultHistory();
+        this.historyManager = Managers.getDefaultHistory();
     }
 
     @Override
@@ -139,6 +139,7 @@ public class InMemoryTaskManager implements TaskManager {
         epicToUpdate.addSubTask(subTask.getId());
         calculateEpicStatus(epicToUpdate.getId());
         calculateEpicTime(epicToUpdate.getId());
+        prioritizedTasks.add(subTask);
         return subTask;
     }
 
@@ -251,10 +252,9 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    public void getPrioritizedTasks() {
-        for (Task task : prioritizedTasks) {
-            System.out.println(task);
-        }
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return prioritizedTasks.stream().toList();
     }
 
     private int generateID() {
