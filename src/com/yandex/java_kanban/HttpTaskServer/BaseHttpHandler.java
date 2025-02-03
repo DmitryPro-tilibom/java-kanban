@@ -7,12 +7,13 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public class BaseHttpHandler {
-    protected static void writeResponse(HttpExchange exchange, String responseString) throws  IOException{
-        try (OutputStream os = exchange.getResponseBody()){
+    protected static void writeResponse(HttpExchange exchange, String responseString) throws  IOException {
+        try (OutputStream os = exchange.getResponseBody()) {
             exchange.sendResponseHeaders(200, 0);
             os.write(responseString.getBytes(StandardCharsets.UTF_8));
         }
     }
+    
     protected void sendText(HttpExchange exchange, String text) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
