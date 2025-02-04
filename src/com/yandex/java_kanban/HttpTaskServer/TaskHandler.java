@@ -50,7 +50,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         sendText(httpExchange, gson.toJson(tasks));
     }
 
-    private void getTaskById(HttpExchange httpExchange) throws IOException{
+    private void getTaskById(HttpExchange httpExchange) throws IOException {
         int id = getTaskId(httpExchange.getRequestURI().getPath());
         Task task = taskManager.getTaskById(id);
         if (task == null) {
