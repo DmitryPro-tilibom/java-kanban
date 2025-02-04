@@ -91,12 +91,8 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void deleteEpics(HttpExchange httpExchange) throws IOException {
-        try {
-            taskManager.deleteAllEpics();
-            sendText(httpExchange, "Эпики удалены.");
-        } catch (Exception e) {
-            sendNotFound(httpExchange, "Эпики не найдены.");
-        }
+        taskManager.deleteAllEpics();
+        sendText(httpExchange, "Эпики удалены.");
     }
 
     private  void deleteEpicById(HttpExchange httpExchange) throws IOException {
