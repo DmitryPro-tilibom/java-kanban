@@ -87,10 +87,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
     private  void deleteTaskById(HttpExchange httpExchange) throws IOException {
         int id = getTaskId(httpExchange.getRequestURI().getPath());
-        Task task = taskManager.getTaskById(id);
-        if (task == null) {
-            sendNotFound(httpExchange, "Задача не найдена");
-        }
         taskManager.deleteTaskById(id);
         sendText(httpExchange, "Задача удалена.");
     }
