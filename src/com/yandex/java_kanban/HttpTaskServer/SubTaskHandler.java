@@ -50,7 +50,7 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler {
         sendText(httpExchange, gson.toJson(subTasks));
     }
 
-    private void getSubTaskById(HttpExchange httpExchange) throws IOException{
+    private void getSubTaskById(HttpExchange httpExchange) throws IOException {
         int id = getTaskId(httpExchange.getRequestURI().getPath());
         SubTask subTask = taskManager.getSubTaskById(id);
         if (subTask == null) {
