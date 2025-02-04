@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager>{
+public class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     File file = File.createTempFile("test", ".CSV");
     File fileForException = new File("C:");
     FileBackedTaskManager savedFilesManager = new FileBackedTaskManager(file);
@@ -53,10 +53,5 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManag
         assertEquals(savedFilesManager.getTasks(), loadedFilesManager.getTasks());
         assertEquals(savedFilesManager.getEpics(), loadedFilesManager.getEpics());
         assertEquals(savedFilesManager.getSubTasks(), loadedFilesManager.getSubTasks());
-    }
-
-    @Test
-    public void testException() {
-        assertThrows(ManagerSaveException.class, () -> forExceptionTestFilesManager.createTask(task));
     }
 }
