@@ -14,7 +14,7 @@ public class BaseHttpHandler {
         }
     }
     
-    protected void sendText(HttpExchange exchange, String text) throws IOException {
+protected void sendText(HttpExchange exchange, String text) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         exchange.sendResponseHeaders(200, response.length);
@@ -22,7 +22,7 @@ public class BaseHttpHandler {
         exchange.close();
     }
 
-    protected void sendNotFound(HttpExchange exchange, String text) throws IOException {
+protected void sendNotFound(HttpExchange exchange, String text) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         exchange.sendResponseHeaders(404, response.length);
@@ -30,7 +30,7 @@ public class BaseHttpHandler {
         exchange.close();
     }
 
-    protected void sendHasIntersections(HttpExchange exchange, String text) throws IOException {
+protected void sendHasIntersections(HttpExchange exchange, String text) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         exchange.sendResponseHeaders(406, response.length);
@@ -38,7 +38,7 @@ public class BaseHttpHandler {
         exchange.close();
     }
 
-    protected int getTaskId(String path) {
+protected int getTaskId(String path) {
         String[] pathStringArray = path.split("/");
         return Integer.parseInt(pathStringArray[2]);
     }
