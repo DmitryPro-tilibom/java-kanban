@@ -13,6 +13,7 @@ public class BaseHttpHandler {
             os.write(responseString.getBytes(StandardCharsets.UTF_8));
         }
     }
+    
     protected void sendText(HttpExchange exchange, String text) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
