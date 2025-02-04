@@ -7,6 +7,9 @@ import com.yandex.java_kanban.service.Managers;
 import com.yandex.java_kanban.service.TaskManager;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SubTaskTest {
@@ -14,8 +17,10 @@ public class SubTaskTest {
 
     Epic epic = new Epic("epic", "epic");
     Epic epicToTest = taskManager.createEpic(epic);
-    SubTask subTask1 = new SubTask("subtask1", "subtaskone", Status.NEW, epicToTest.getId());
-    SubTask subTask2 = new SubTask("subtask2", "subtasktwo", Status.DONE, epicToTest.getId());
+    SubTask subTask1 = new SubTask("subtask1", "subtaskone", Status.NEW,
+            LocalDateTime.now(), Duration.ofMinutes(2), epicToTest.getId());
+    SubTask subTask2 = new SubTask("subtask2", "subtasktwo", Status.DONE,
+            LocalDateTime.now(), Duration.ofMinutes(3), epicToTest.getId());
 
 
     @Test
