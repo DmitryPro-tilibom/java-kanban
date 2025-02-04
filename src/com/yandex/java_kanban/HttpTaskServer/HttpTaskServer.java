@@ -26,7 +26,7 @@ public class HttpTaskServer {
         httpServer.createContext("/prioritized", new PrioritizedHandler(taskManager));
     }
 
-    public void stopConnection(){
+    public void stopConnection() {
         httpServer.stop(1);
     }
 
