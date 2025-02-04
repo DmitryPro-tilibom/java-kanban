@@ -77,12 +77,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void deleteTasks(HttpExchange httpExchange) throws IOException {
-        try {
-            taskManager.deleteAllTasks();
-            sendText(httpExchange, "Задачи удалены.");
-        } catch (Exception e) {
-            sendNotFound(httpExchange, "Задачи не найдены.");
-        }
+        taskManager.deleteAllTasks();
+        sendText(httpExchange, "Задачи удалены.");
     }
 
     private  void deleteTaskById(HttpExchange httpExchange) throws IOException {
