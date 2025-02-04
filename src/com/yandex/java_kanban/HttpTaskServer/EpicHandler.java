@@ -64,7 +64,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
         sendText(httpExchange, gson.toJson(subTasks));
     }
 
-    private void getEpicById(HttpExchange httpExchange) throws IOException{
+    private void getEpicById(HttpExchange httpExchange) throws IOException {
         int id = getTaskId(httpExchange.getRequestURI().getPath());
         Epic epic = taskManager.getEpicById(id);
         if (epic == null) {
