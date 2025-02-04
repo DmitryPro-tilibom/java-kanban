@@ -12,7 +12,7 @@ public class BaseHttpHandler {
             exchange.sendResponseHeaders(200, 0);
             os.write(responseString.getBytes(StandardCharsets.UTF_8));
         }
-    }
+}
 
 protected void sendText(HttpExchange exchange, String text) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
