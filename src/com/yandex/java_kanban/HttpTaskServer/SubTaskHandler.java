@@ -86,11 +86,7 @@ public class SubTaskHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private  void deleteSubTaskById(HttpExchange httpExchange) throws IOException {
-        int id = getTaskId(httpExchange.getRequestURI().getPath());
-        SubTask subTask = taskManager.getSubTaskById(id);
-        if (subTask == null) {
-            sendNotFound(httpExchange, "Подзадача не найдена");
-        }
+        int id = getTaskId(httpExchange.getRequestURI().getPath())
         taskManager.deleteSubTaskById(id);
         sendText(httpExchange, "Подзадача удалена.");
     }
