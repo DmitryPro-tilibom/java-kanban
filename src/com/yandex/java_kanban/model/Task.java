@@ -64,7 +64,9 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        int result = startTime != null ? Objects.hash(startTime) : 0;
+        result = 13 * result + id + Objects.hash(name) + Objects.hash(status);
+        return result;
     }
 
     public LocalDateTime getStartTime() {
@@ -92,7 +94,9 @@ public class Task {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return id == task.id;
+        return id == task.id && name.equals(task.name) && description.equals(task.description) &&
+                status.equals(task.status) && startTime.equals(task.startTime) &&
+                duration.equals(task.duration);
     }
 
     @Override
